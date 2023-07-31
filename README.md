@@ -1,8 +1,17 @@
-# React + Vite
+# Cradle
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Usage
+- Step-1:  
+  Clone this repository and `cd` to `cradle-vite`.
+  
+- Step-2:  
+  Install dependency
+  ```
+  npm install
+  ```
+- Step-3:
+  Run the service
+  ```
+  npm run dev
+  ```
 
-Currently, two official plugins are available:
-
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
