@@ -1,46 +1,102 @@
-import React, { useState } from 'react';
-import axios from 'axios';
+/**
+ * This code demonstrates how to use the OpenAI API to generate chat completions.
+ * The generated completions are received as a stream of data from the API and the
+ * code includes functionality to handle errors and abort requests using an AbortController.
+ * The API_KEY variable needs to be updated with the appropriate value from OpenAI for successful API communication.
+ */
 
-const App = () => {
-  const [formData, setFormData] = useState({
-    txt: "%petfriendly%  Faherty San Francisco",
-  });
+const API_URL = "https://76cf-140-112-41-151.ngrok-free.app/petlover/callback";
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
-  };
+const promptInput = document.getElementById("promptInput");
+const generateBtn = document.getElementById("generateBtn");
+const stopBtn = document.getElementById("stopBtn");
+const resultText = document.getElementById("resultText");
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+let controller = null; // Store the AbortController instance
 
-    const backendURL = 'https://76cf-140-112-41-151.ngrok-free.app/petlover/callback'; // Replace this with your actual backend URL
-    console.log("what I post:", formData)
-    axios.post(backendURL, formData)
-      .then(response => {
-        // Handle the response from the backend
-        console.log('Response:', response.data);
-      })
-      .catch(error => {
-        // Handle any errors that occurred during the request
-        console.error('Error:', error);
-      });
-  };
+const generate = async () => {
+  // Alert the user if no prompt value
+  if (!promptInput.value) {
+    alert("Please enter a prompt.");
+    return;
+  }
 
-  return (
-    <div>
-      <h1>Contact Form</h1>
-      <form onSubmit={handleSubmit}>
-        <label htmlFor="txt">Text:</label>
-        <input type="text" id="txt" name="txt" value={formData.txt} onChange={handleChange} required />
+  // Disable the generate button and enable the stop button
+  generateBtn.disabled = true;
+  stopBtn.disabled = false;
+  resultText.innerText = "Generating...";
 
-        <button type="submit">Submit</button>
-      </form>
-    </div>
-  );
+  // Create a new AbortController instance
+  controller = new AbortController();
+  const signal = controller.signal;
+
+  try {
+    // Fetch the response from the OpenAI API with the signal from AbortController
+    const response = await fetch(API_URL, {
+      method: "POST",
+      body: JSON.stringify({
+        txt: promptInput.value ,
+      }),
+      signal, // Pass the signal to the fetch request
+    });
+
+    // Read the response as a stream of data
+    const reader = response.body.getReader();
+    const decoder = new TextDecoder("utf-8");
+    resultText.innerText = "";
+
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) {
+        break;
+      }
+      // Massage and parse the chunk of data
+      const chunk = decoder.decode(value);
+      const parsedLines = chunk.split("\n");
+      //const lines = chunk.split("\n");
+      //const parsedLines = lines
+      //  .map((line) => line.replace(/^data: /, "").trim()) // Remove the "data: " prefix
+      //  .filter((line) => line !== "" && line !== "[DONE]") // Remove empty lines and "[DONE]"
+      //  .map((line) => JSON.parse(line)); // Parse the JSON string
+
+      for (const parsedLine of parsedLines) {
+        //const { choices } = parsedLine;
+        //const { delta } = choices[0];
+        //const { content } = delta;
+        // Update the UI with the new content
+        if (parsedLine) {
+          resultText.innerText += parsedLine;
+        }
+      }
+    }
+  } catch (error) {
+    // Handle fetch request errors
+    if (signal.aborted) {
+      resultText.innerText = "Request aborted.";
+    } else {
+      console.error("Error:", error);
+      resultText.innerText = "Error occurred while generating.";
+    }
+  } finally {
+    // Enable the generate button and disable the stop button
+    generateBtn.disabled = false;
+    stopBtn.disabled = true;
+    controller = null; // Reset the AbortController instance
+  }
 };
 
-export default App;
+const stop = () => {
+  // Abort the fetch request by calling abort() on the AbortController instance
+  if (controller) {
+    controller.abort();
+    controller = null;
+  }
+};
+
+promptInput.addEventListener("keyup", (event) => {
+  if (event.key === "Enter") {
+    generate();
+  }
+});
+generateBtn.addEventListener("click", generate);
+stopBtn.addEventListener("click", stop);
