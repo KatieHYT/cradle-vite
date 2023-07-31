@@ -1,9 +1,6 @@
 /**
- * This code demonstrates how to use the OpenAI API to generate chat completions.
- * The generated completions are received as a stream of data from the API and the
- * code includes functionality to handle errors and abort requests using an AbortController.
- * The API_KEY variable needs to be updated with the appropriate value from OpenAI for successful API communication.
- */
+Ref: https://github.com/EBEREGIT/react-chatgpt-tutorial 
+*/
 
 const API_URL = "https://76cf-140-112-41-151.ngrok-free.app/petlover/callback";
 
@@ -17,14 +14,14 @@ let controller = null; // Store the AbortController instance
 const generate = async () => {
   // Alert the user if no prompt value
   if (!promptInput.value) {
-    alert("Please enter a prompt.");
+    alert("Please enter a store name.");
     return;
   }
 
   // Disable the generate button and enable the stop button
   generateBtn.disabled = true;
   stopBtn.disabled = false;
-  resultText.innerText = "Generating...";
+  resultText.innerText = "Sniffing...";
 
   // Create a new AbortController instance
   controller = new AbortController();
@@ -35,7 +32,7 @@ const generate = async () => {
     const response = await fetch(API_URL, {
       method: "POST",
       body: JSON.stringify({
-        txt: promptInput.value ,
+        txt: "%petfriendly%"+promptInput.value ,
       }),
       signal, // Pass the signal to the fetch request
     });
@@ -53,17 +50,8 @@ const generate = async () => {
       // Massage and parse the chunk of data
       const chunk = decoder.decode(value);
       const parsedLines = chunk.split("\n");
-      //const lines = chunk.split("\n");
-      //const parsedLines = lines
-      //  .map((line) => line.replace(/^data: /, "").trim()) // Remove the "data: " prefix
-      //  .filter((line) => line !== "" && line !== "[DONE]") // Remove empty lines and "[DONE]"
-      //  .map((line) => JSON.parse(line)); // Parse the JSON string
 
       for (const parsedLine of parsedLines) {
-        //const { choices } = parsedLine;
-        //const { delta } = choices[0];
-        //const { content } = delta;
-        // Update the UI with the new content
         if (parsedLine) {
           resultText.innerText += parsedLine;
         }
