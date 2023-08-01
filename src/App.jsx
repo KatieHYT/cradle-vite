@@ -14,7 +14,7 @@ let controller = null; // Store the AbortController instance
 const generate = async () => {
   // Alert the user if no prompt value
   if (!promptInput.value) {
-    alert("Please enter a store name.");
+    alert("Please enter a URL contains either /maps/search or /maps/place.");
     return;
   }
 
@@ -36,7 +36,7 @@ const generate = async () => {
       }),
       signal, // Pass the signal to the fetch request
     });
-
+    
     // Read the response as a stream of data
     const reader = response.body.getReader();
     const decoder = new TextDecoder("utf-8");
