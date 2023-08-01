@@ -12,6 +12,6 @@
 - Step-3:
   Run the service
   ```
-  npm run dev
+  npm run dev -- --port CUSTOM_PORT
   ```
 
