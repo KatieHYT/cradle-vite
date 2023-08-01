@@ -2,7 +2,7 @@
 Ref: https://github.com/EBEREGIT/react-chatgpt-tutorial 
 */
 
-const API_URL = "https://76cf-140-112-41-151.ngrok-free.app/petlover/callback";
+const API_URL = "https://9657-140-112-41-151.ngrok-free.app/petlover/callback";
 
 const promptInput = document.getElementById("promptInput");
 const generateBtn = document.getElementById("generateBtn");
