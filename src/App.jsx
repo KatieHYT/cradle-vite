@@ -2,7 +2,7 @@
 Ref: https://github.com/EBEREGIT/react-chatgpt-tutorial 
 */
 
-const API_URL = "https://9657-140-112-41-151.ngrok-free.app/petlover/callback";
+const API_URL = "https://4e01-140-112-41-151.ngrok-free.app/petlover/callback";
 
 const promptInput = document.getElementById("promptInput");
 const generateBtn = document.getElementById("generateBtn");
@@ -11,6 +11,7 @@ const resultText = document.getElementById("resultText");
 
 let controller = null; // Store the AbortController instance
 
+// define the generate function
 const generate = async () => {
   // Alert the user if no prompt value
   if (!promptInput.value) {
@@ -81,6 +82,7 @@ const stop = () => {
   }
 };
 
+// make Enter also be a trigger
 promptInput.addEventListener("keyup", (event) => {
   if (event.key === "Enter") {
     generate();
