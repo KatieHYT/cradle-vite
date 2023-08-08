@@ -8,23 +8,20 @@ let controller = null; // Store the AbortController instance
 controller = new AbortController();
 const signal = controller.signal;
 
-const stop = () => {
-  // Abort the fetch request by calling abort() on the AbortController instance
-  if (controller) {
-    controller.abort();
-    controller = null;
-  }
-};
-
-
 function StopButton() {
+  function Stop() {
+    // Abort the fetch request by calling abort() on the AbortController instance
+    if (controller) {
+      controller.abort();
+      controller = null;
+    }
+  };
   return (
-    <button id="stopBtn" onClick={stop}>
+    <button id="stopBtn" onClick={Stop}>
         Stop
     </button>
   );
 }
-
 
 const user = {
   name: 'Hedy Lamarr',
@@ -70,28 +67,28 @@ function App() {
   const [selectedPlace, setSelectedPlace] = useState(null);
   const [placeId, setPlaceId] = useState('');
 
-  const handlePlaceSelect = (place) => {
-    console.log('place: '+place);
-    setSelectedPlace(place);
-    setPlaceId(place.place_id);
-  };
-
-  const displayDetail = (autocomplete) => {
-    controller = new AbortController(); // Create a new AbortController instance
-    const signal = controller.signal;
-  
-    autocomplete.addListener('place_changed', () => {
-      const place = autocomplete.getPlace();
-      if (!place.place_id) return;
-      handlePlaceSelect(place);
-    });
-  }
-
   function GoogleSearchBox() {
+    function DisplayDetail(autocomplete) {
+      controller = new AbortController(); // Create a new AbortController instance
+      const signal = controller.signal;
+    
+      autocomplete.addListener('place_changed', () => {
+        const place = autocomplete.getPlace();
+        if (!place.place_id) return;
+        HandlePlaceSelect(place);
+      });
+    }
+
+    function HandlePlaceSelect(place){
+      console.log('place: '+place);
+      setSelectedPlace(place);
+      setPlaceId(place.place_id);
+    };
+
     return (
         <LoadScript googleMapsApiKey={GOOGLE_MAP_API_KEY} libraries={['places']}>
           <Autocomplete
-            onLoad={displayDetail}
+            onLoad={DisplayDetail}
             onPlaceChanged={() => {}}
           >
             <input 
@@ -103,8 +100,6 @@ function App() {
         </LoadScript>
     );
   }
-
-
 
   function GenerateButton() {
     async function Generate() {
