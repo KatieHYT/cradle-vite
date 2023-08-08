@@ -1,20 +1,36 @@
-/**
-Ref: https://github.com/EBEREGIT/react-chatgpt-tutorial 
-*/
+import React, { useState } from 'react';
+import { GoogleMap, LoadScript, Autocomplete } from '@react-google-maps/api';
 
-const API_URL = "https://9657-140-112-41-151.ngrok-free.app/petlover/callback";
+const API_URL = "https://4e01-140-112-41-151.ngrok-free.app/petlover/callback";
 
-const promptInput = document.getElementById("promptInput");
-const generateBtn = document.getElementById("generateBtn");
-const stopBtn = document.getElementById("stopBtn");
-const resultText = document.getElementById("resultText");
+function App() {
+  const [selectedPlace, setSelectedPlace] = useState(null);
+  const [placeId, setPlaceId] = useState('');
+  let controller = null; // Store the AbortController instance
+  controller = new AbortController();
+  const signal = controller.signal;
 
-let controller = null; // Store the AbortController instance
+  const handlePlaceSelect = (place) => {
+    console.log('place: '+place);
+    setSelectedPlace(place);
+    setPlaceId(place.place_id);
+  };
+
+  const displayDetail = (autocomplete) => {
+    controller = new AbortController(); // Create a new AbortController instance
+    const signal = controller.signal;
+
+    autocomplete.addListener('place_changed', () => {
+      const place = autocomplete.getPlace();
+      if (!place.place_id) return;
+      handlePlaceSelect(place);
+    });
+  }
 
 const generate = async () => {
   // Alert the user if no prompt value
-  if (!promptInput.value) {
-    alert("Please enter a URL contains either /maps/search or /maps/place.");
+  if (!placeId) {
+    alert("Please enter a place.");
     return;
   }
 
@@ -32,11 +48,11 @@ const generate = async () => {
     const response = await fetch(API_URL, {
       method: "POST",
       body: JSON.stringify({
-        txt: "%petfriendly%"+promptInput.value ,
+        txt: "%petfriendly%"+placeId ,
       }),
       signal, // Pass the signal to the fetch request
     });
-    
+
     // Read the response as a stream of data
     const reader = response.body.getReader();
     const decoder = new TextDecoder("utf-8");
@@ -64,7 +80,7 @@ const generate = async () => {
     } else {
       console.error("Error:", error);
       resultText.innerText = "Error occurred while generating.";
-    }
+   }
   } finally {
     // Enable the generate button and disable the stop button
     generateBtn.disabled = false;
@@ -81,10 +97,34 @@ const stop = () => {
   }
 };
 
-promptInput.addEventListener("keyup", (event) => {
-  if (event.key === "Enter") {
-    generate();
-  }
-});
-generateBtn.addEventListener("click", generate);
-stopBtn.addEventListener("click", stop);
+return (
+    <div>
+      <h1>Place ID Finder</h1>
+      <LoadScript googleMapsApiKey="AIzaSyAW6fRxtCxXqPoLgRd40uZEqLVAs-XmRQ4" libraries={['places']}>
+        <Autocomplete
+          onLoad={displayDetail}
+          onPlaceChanged={() => {}}
+        >
+          <input type="text" placeholder="Enter location" />
+        </Autocomplete>
+      </LoadScript>
+      <button id="generateBtn" onClick={generate}>
+          Sniffing out Pet-friendliness in the Store
+      </button>
+      <button id="stopBtn" onClick={stop}>
+          Stop
+      </button>
+      {selectedPlace && (
+        <div>
+          <h2>Selected Place Information:</h2>
+          <p>Name: {selectedPlace.name}</p>
+          <p>Address: {selectedPlace.formatted_address}</p>	
+          <p id="resultText"> </p>
+          {/* Add more information as needed */}
+        </div>
+      )}
+    </div>
+  );
+}
+
+export default App;
