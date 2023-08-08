@@ -99,7 +99,7 @@ const stop = () => {
 
 return (
     <div>
-      <h1>Place ID Finder</h1>
+      <h1>Project Cradle</h1>
       <LoadScript googleMapsApiKey="AIzaSyAW6fRxtCxXqPoLgRd40uZEqLVAs-XmRQ4" libraries={['places']}>
         <Autocomplete
           onLoad={displayDetail}
