@@ -97,9 +97,8 @@ const stop = () => {
   }
 };
 
-return (
-    <div>
-      <h1>Project Cradle</h1>
+function GoogleSearchBox() {
+  return (
       <LoadScript googleMapsApiKey="AIzaSyAW6fRxtCxXqPoLgRd40uZEqLVAs-XmRQ4" libraries={['places']}>
         <Autocomplete
           onLoad={displayDetail}
@@ -108,21 +107,42 @@ return (
           <input type="text" placeholder="Enter location" />
         </Autocomplete>
       </LoadScript>
-      <button id="generateBtn" onClick={generate}>
-          Sniffing out Pet-friendliness in the Store
-      </button>
-      <button id="stopBtn" onClick={stop}>
-          Stop
-      </button>
-      {selectedPlace && (
-        <div>
-          <h2>Selected Place Information:</h2>
-          <p>Name: {selectedPlace.name}</p>
-          <p>Address: {selectedPlace.formatted_address}</p>	
-          <p id="resultText"> </p>
-          {/* Add more information as needed */}
-        </div>
-      )}
+  );
+}
+
+function GenerateButton() {
+  return (
+    <button id="generateBtn" onClick={generate}>
+        Sniffing out Pet-friendliness in the Store
+    </button>
+  );
+}
+
+function StopButton() {
+  return (
+    <button id="stopBtn" onClick={stop}>
+        Stop
+    </button>
+  );
+}
+
+function InfoBox() {
+  return (
+      <div>
+        <p>{selectedPlace.name}</p>
+        <p>{selectedPlace.formatted_address}</p>	
+        <p id="resultText"> </p>
+        {/* Add more information as needed */}
+      </div>
+  );
+}
+return (
+    <div>
+      <h1>Project Cradle</h1>
+      <GoogleSearchBox/>
+      <GenerateButton/>
+      <StopButton/>
+      {selectedPlace && <InfoBox/>}
     </div>
   );
 }
