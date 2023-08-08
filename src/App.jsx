@@ -105,72 +105,72 @@ function App() {
   }
 
 
-  const generate = async () => {
-    // Alert the user if no prompt value
-    if (!placeId) {
-      alert("Please enter a place.");
-      return;
-    }
-  
-    // Disable the generate button and enable the stop button
-    generateBtn.disabled = true;
-    stopBtn.disabled = false;
-    resultText.innerText = "Sniffing...";
-  
-    // Create a new AbortController instance
-    controller = new AbortController();
-    const signal = controller.signal;
-  
-    try {
-      // Fetch the response from the OpenAI API with the signal from AbortController
-      const response = await fetch(API_URL, {
-        method: "POST",
-        body: JSON.stringify({
-          txt: "%petfriendly%"+placeId ,
-        }),
-        signal, // Pass the signal to the fetch request
-      });
-  
-      // Read the response as a stream of data
-      const reader = response.body.getReader();
-      const decoder = new TextDecoder("utf-8");
-      resultText.innerText = "";
-  
-      while (true) {
-        const { done, value } = await reader.read();
-        if (done) {
-          break;
-        }
-        // Massage and parse the chunk of data
-        const chunk = decoder.decode(value);
-        const parsedLines = chunk.split("\n");
-  
-        for (const parsedLine of parsedLines) {
-          if (parsedLine) {
-            resultText.innerText += parsedLine;
-          }
-        }
-      }
-    } catch (error) {
-      // Handle fetch request errors
-      if (signal.aborted) {
-        resultText.innerText = "Request aborted.";
-      } else {
-        console.error("Error:", error);
-        resultText.innerText = "Error occurred while generating.";
-     }
-    } finally {
-      // Enable the generate button and disable the stop button
-      generateBtn.disabled = false;
-      stopBtn.disabled = true;
-      controller = null; // Reset the AbortController instance
-    }
-  };
 
   function GenerateButton() {
+    async function Generate() {
+      // Alert the user if no prompt value
+      if (!placeId) {
+        alert("Please enter a place.");
+        return;
+      }
+    
+      // Disable the generate button and enable the stop button
+      generateBtn.disabled = true;
+      stopBtn.disabled = false;
+      resultText.innerText = "Sniffing...";
+    
+      // Create a new AbortController instance
+      controller = new AbortController();
+      const signal = controller.signal;
+    
+      try {
+        // Fetch the response from the OpenAI API with the signal from AbortController
+        const response = await fetch(API_URL, {
+          method: "POST",
+          body: JSON.stringify({
+            txt: "%petfriendly%"+placeId ,
+          }),
+          signal, // Pass the signal to the fetch request
+        });
+    
+        // Read the response as a stream of data
+        const reader = response.body.getReader();
+        const decoder = new TextDecoder("utf-8");
+        resultText.innerText = "";
+    
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) {
+            break;
+          }
+          // Massage and parse the chunk of data
+          const chunk = decoder.decode(value);
+          const parsedLines = chunk.split("\n");
+    
+          for (const parsedLine of parsedLines) {
+            if (parsedLine) {
+              resultText.innerText += parsedLine;
+            }
+          }
+        }
+      } catch (error) {
+        // Handle fetch request errors
+        if (signal.aborted) {
+          resultText.innerText = "Request aborted.";
+        } else {
+          console.error("Error:", error);
+          resultText.innerText = "Error occurred while generating.";
+       }
+      } finally {
+        // Enable the generate button and disable the stop button
+        generateBtn.disabled = false;
+        stopBtn.disabled = true;
+        controller = null; // Reset the AbortController instance
+      }
+    };
     return (
-      <button id="generateBtn" onClick={generate}>
-          Sniffing out Pet-friendliness in the Store
+      <button id="generateBtn" onClick={Generate}>
+          Sniffing out Pet-friendliness in the Selected Place
       </button>
     );
   }
