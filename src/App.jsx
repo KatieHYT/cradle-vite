@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { GoogleMap, LoadScript, Autocomplete } from '@react-google-maps/api';
+import GOOGLE_MAP_API_KEY from './api_key'; // Import the API key
 
 const API_URL = "https://4e01-140-112-41-151.ngrok-free.app/petlover/callback";
-const GOOGLE_MAP_API_KEY = "AIzaSyAW6fRxtCxXqPoLgRd40uZEqLVAs-XmRQ4"
 
 let controller = null; // Store the AbortController instance
 let placeId;
