@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -6,48 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <title>Project Cradle</title>
-    <script type="module" src="src/App.jsx"></script>
     <link rel="icon" type="image/svg+xml" href="/01_square.svg" />  
-</head>
-  <body
-    class="bg-white text-black min-h-screen flex items-center justify-center"
-  >
-    <div class="lg:w-1/2 2xl:w-1/3 p-8 rounded-md bg-gray-100">
-      <h1 class="text-3xl font-bold mb-6">
-        Project Cradle
-      </h1>
-<div class="leftside">
-            <ul class="socialmediaicons">
-              <a href="https://instagram.com/projectcradle_sf?igshid=MzRlODBiNWFlZA=="><li style="display: inline;"><i class="fa fa-instagram"></i></li></a>
-              <a href="https://www.youtube.com/watch?v=PjKbckberp0"><li style="display: inline;"><i class="fa fa-youtube"></i></li></a>
-            </ul>
-       </div>
-      <div id="resultContainer" class="mt-4 h-48 overflow-y-auto">
-        <p class="text-gray-500 text-sm mb-2">Together, make the world better!</p>
-        <p id="resultText" class="whitespace-pre-line"></p>
-      </div>
-      <input
-        type="text"
-        id="promptInput"
-        class="w-full px-4 py-2 rounded-md bg-gray-200 placeholder-gray-500 focus:outline-none mt-4"
-        placeholder="Enter a URL contains either /maps/search or /maps/place..."
-      />
-      <div class="flex justify-center mt-4">
-        <button
-          id="generateBtn"
-          class="w-4/5 px-4 py-2 rounded-md bg-black text-white hover:bg-gray-900 focus:outline-none mr-2 disabled:opacity-75 disabled:cursor-not-allowed"
-        >
-          Sniffing out Pet-friendliness in the Store
-        </button>
-        <button
-          id="stopBtn"
-          disabled
-          class="w-1/5 px-4 py-2 rounded-md border border-gray-500 text-gray-500 hover:text-gray-700 hover:border-gray-700 focus:outline-none ml-2 disabled:opacity-75 disabled:cursor-not-allowed"
-        >
-          Stop
-        </button>
-      </div>
-    </div>
+    <title>Project Cradle</title>
+  </head>
+  <body class="bg-white text-black min-h-screen flex items-center justify-center">
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>
