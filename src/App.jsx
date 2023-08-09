@@ -3,7 +3,6 @@ import { GoogleMap, LoadScript, Autocomplete } from '@react-google-maps/api';
 import GOOGLE_MAP_API_KEY from './api_key'; // Import the API key
 
 const API_URL = "https://4e01-140-112-41-151.ngrok-free.app/petlover/callback";
-
 let controller = null; // Store the AbortController instance
 let placeId;
 let placeName = "Enter a Location";
@@ -27,6 +26,7 @@ function StopButton() {
     </button>
   );
 }
+
 
 function GoogleSearchBox() {
   function DisplayDetail(autocomplete) {
@@ -137,6 +137,7 @@ function InfoBox() {
       </div>
   );
 }
+
 
 function HyperLink(){
   return (
