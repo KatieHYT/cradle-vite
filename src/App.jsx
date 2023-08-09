@@ -5,9 +5,6 @@ const API_URL = "https://4e01-140-112-41-151.ngrok-free.app/petlover/callback";
 const GOOGLE_MAP_API_KEY = "AIzaSyAW6fRxtCxXqPoLgRd40uZEqLVAs-XmRQ4"
 
 let controller = null; // Store the AbortController instance
-controller = new AbortController();
-const signal = controller.signal;
-
 let placeId;
 let placeName = "Enter a Location";
 let placeAddress = "";
@@ -23,9 +20,8 @@ function StopButton() {
   return (
     <button 
       id="stopBtn" 
-      disabled
-      className="w-1/5 px-4 py-2 rounded-md border border-gray-500 text-gray-500 hover:text-gray-700 hover:border-gray-700 focus:outline-none ml-2 disabled:opacity-75 disabled:cursor-not-allowed"
       onClick={Stop}
+      className="w-1/5 px-4 py-2 rounded-md border border-gray-500 text-gray-500 hover:text-gray-700 hover:border-gray-700 focus:outline-none ml-2 disabled:opacity-75 disabled:cursor-not-allowed"
     >
         Stop
     </button>
@@ -34,9 +30,6 @@ function StopButton() {
 
 function GoogleSearchBox() {
   function DisplayDetail(autocomplete) {
-    controller = new AbortController(); // Create a new AbortController instance
-    const signal = controller.signal;
-  
     autocomplete.addListener('place_changed', () => {
       const place = autocomplete.getPlace();
       if (!place.place_id) return;
@@ -139,10 +132,6 @@ function GenerateButton() {
 
 function InfoBox() {
   return (
-      //<div>
-      //  <p id="resultText"> </p>
-      //  {/* Add more information as needed */}
-      //</div>
       <div id="resultContainer" className="mt-4 h-48 overflow-y-auto">
         <p id="resultText" className="whitespace-pre-line"></p>
       </div>
@@ -188,7 +177,7 @@ function ButtonArea(){
 }
 
 function App() {
-return (
+  return (
     <div className="lg:w-1/2 2xl:w-1/3 p-8 rounded-md bg-gray-100">
       <ProjectInfo/>
       <GoogleSearchBox/>
