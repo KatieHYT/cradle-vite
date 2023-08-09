@@ -8,6 +8,10 @@ let controller = null; // Store the AbortController instance
 controller = new AbortController();
 const signal = controller.signal;
 
+let placeId;
+let placeName = "Enter a Location";
+let placeAddress = "";
+
 function StopButton() {
   function Stop() {
     // Abort the fetch request by calling abort() on the AbortController instance
@@ -17,195 +21,179 @@ function StopButton() {
     }
   };
   return (
-    <button id="stopBtn" onClick={Stop}>
+    <button 
+      id="stopBtn" 
+      disabled
+      className="w-1/5 px-4 py-2 rounded-md border border-gray-500 text-gray-500 hover:text-gray-700 hover:border-gray-700 focus:outline-none ml-2 disabled:opacity-75 disabled:cursor-not-allowed"
+      onClick={Stop}
+    >
         Stop
     </button>
   );
 }
 
-const user = {
-  name: 'Hedy Lamarr',
-  imageUrl: 'https://i.imgur.com/yXOvdOSs.jpg',
-  imageSize: 90,
-};
+function GoogleSearchBox() {
+  function DisplayDetail(autocomplete) {
+    controller = new AbortController(); // Create a new AbortController instance
+    const signal = controller.signal;
+  
+    autocomplete.addListener('place_changed', () => {
+      const place = autocomplete.getPlace();
+      if (!place.place_id) return;
+      //setPlaceId(place.place_id);
+      placeId = place.place_id
+      placeName = place.name
+      placeAddress = place.formatted_address
+    });
+  }
 
-function Profile() {
   return (
-    <>
-      <h1>{user.name}</h1>
-      <img
-        className="avatar"
-        src={user.imageUrl}
-        alt={'Photo of ' + user.name}
-        style={{
-          width: user.imageSize,
-          height: user.imageSize
-        }}
-      />
-    </>
+      <LoadScript googleMapsApiKey={GOOGLE_MAP_API_KEY} libraries={['places']}>
+        <Autocomplete
+          onLoad={DisplayDetail}
+          onPlaceChanged={() => {}}
+        >
+          <input 
+            type="text" 
+            placeholder= {placeName + "    " + placeAddress}
+            style={{ width: '600px', height: '40px', fontSize: '16px' }}
+            className="w-full px-4 py-2 rounded-md bg-gray-200 placeholder-gray-500 focus:outline-none mt-4"
+          />
+        </Autocomplete>
+      </LoadScript>
   );
 }
 
-const products = [
-  { title: 'Cabbage', isFruit: false, id: 1 },
-  { title: 'Garlic', isFruit: false, id: 2 },
-  { title: 'Apple', isFruit: true, id: 3 },
-];
-
-const listItems = products.map(product =>
-    <li
-      key={product.id}
-      style={{
-        color: product.isFruit ? 'magenta' : 'darkgreen'
-      }}
-    >
-      {product.title}
-    </li>
-  );
-
-function App() {
-  const [selectedPlace, setSelectedPlace] = useState(null);
-  const [placeId, setPlaceId] = useState('');
-
-  function GoogleSearchBox() {
-    function DisplayDetail(autocomplete) {
-      controller = new AbortController(); // Create a new AbortController instance
-      const signal = controller.signal;
-    
-      autocomplete.addListener('place_changed', () => {
-        const place = autocomplete.getPlace();
-        if (!place.place_id) return;
-        HandlePlaceSelect(place);
-      });
+function GenerateButton() {
+  async function Generate() {
+    // Alert the user if no prompt value
+    if (!placeId) {
+      alert("Please enter a place.");
+      return;
     }
-
-    function HandlePlaceSelect(place){
-      console.log('place: '+place);
-      setSelectedPlace(place);
-      setPlaceId(place.place_id);
-    };
-
-    return (
-        <LoadScript googleMapsApiKey={GOOGLE_MAP_API_KEY} libraries={['places']}>
-          <Autocomplete
-            onLoad={DisplayDetail}
-            onPlaceChanged={() => {}}
-          >
-            <input 
-	      type="text" 
-	      placeholder="Enter location"
-	      style={{ width: '600px', height: '40px', fontSize: '16px' }}
-	    />
-          </Autocomplete>
-        </LoadScript>
-    );
-  }
-
-  function GenerateButton() {
-    async function Generate() {
-      // Alert the user if no prompt value
-      if (!placeId) {
-        alert("Please enter a place.");
-        return;
-      }
-    
-      // Disable the generate button and enable the stop button
-      generateBtn.disabled = true;
-      stopBtn.disabled = false;
-      resultText.innerText = "Sniffing...";
-    
-      // Create a new AbortController instance
-      controller = new AbortController();
-      const signal = controller.signal;
-    
-      try {
-        // Fetch the response from the OpenAI API with the signal from AbortController
-        const response = await fetch(API_URL, {
-          method: "POST",
-          body: JSON.stringify({
-            txt: "%petfriendly%"+placeId ,
-          }),
-          signal, // Pass the signal to the fetch request
-        });
-    
-        // Read the response as a stream of data
-        const reader = response.body.getReader();
-        const decoder = new TextDecoder("utf-8");
-        resultText.innerText = "";
-    
-        while (true) {
-          const { done, value } = await reader.read();
-          if (done) {
-            break;
-          }
-          // Massage and parse the chunk of data
-          const chunk = decoder.decode(value);
-          const parsedLines = chunk.split("\n");
-    
-          for (const parsedLine of parsedLines) {
-            if (parsedLine) {
-              resultText.innerText += parsedLine;
-            }
+  
+    // Disable the generate button and enable the stop button
+    generateBtn.disabled = true;
+    stopBtn.disabled = false;
+    resultText.innerText = "Sniffing...";
+  
+    // Create a new AbortController instance
+    controller = new AbortController();
+    const signal = controller.signal;
+  
+    try {
+      // Fetch the response from the OpenAI API with the signal from AbortController
+      const response = await fetch(API_URL, {
+        method: "POST",
+        body: JSON.stringify({
+          txt: "%petfriendly%"+placeId ,
+        }),
+        signal, // Pass the signal to the fetch request
+      });
+  
+      // Read the response as a stream of data
+      const reader = response.body.getReader();
+      const decoder = new TextDecoder("utf-8");
+      resultText.innerText = "";
+  
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) {
+          break;
+        }
+        // Massage and parse the chunk of data
+        const chunk = decoder.decode(value);
+        const parsedLines = chunk.split("\n");
+  
+        for (const parsedLine of parsedLines) {
+          if (parsedLine) {
+            resultText.innerText += parsedLine;
           }
         }
-      } catch (error) {
-        // Handle fetch request errors
-        if (signal.aborted) {
-          resultText.innerText = "Request aborted.";
-        } else {
-          console.error("Error:", error);
-          resultText.innerText = "Error occurred while generating.";
-       }
-      } finally {
-        // Enable the generate button and disable the stop button
-        generateBtn.disabled = false;
-        stopBtn.disabled = true;
-        controller = null; // Reset the AbortController instance
       }
-    };
-    return (
-      <button id="generateBtn" onClick={Generate}>
-          Sniffing out Pet-friendliness in the Selected Place
-      </button>
-    );
-  }
+    } catch (error) {
+      // Handle fetch request errors
+      if (signal.aborted) {
+        resultText.innerText = "Request aborted.";
+      } else {
+        console.error("Error:", error);
+        resultText.innerText = "Error occurred while generating.";
+     }
+    } finally {
+      // Enable the generate button and disable the stop button
+      generateBtn.disabled = false;
+      stopBtn.disabled = true;
+      controller = null; // Reset the AbortController instance
+    }
+  };
+  return (
+    <button 
+      id="generateBtn" 
+      onClick={Generate}
+      className="w-4/5 px-4 py-2 rounded-md bg-black text-white hover:bg-gray-900 focus:outline-none mr-2 disabled:opacity-75 disabled:cursor-not-allowed"
+    >
+        Sniffing out Pet-friendliness in the Selected Place
+    </button>
+  );
+}
 
-  function InfoBox() {
-    return (
-        <div>
-          <p id="resultText"> </p>
-          {/* Add more information as needed */}
-        </div>
-    );
-  }
+function InfoBox() {
+  return (
+      //<div>
+      //  <p id="resultText"> </p>
+      //  {/* Add more information as needed */}
+      //</div>
+      <div id="resultContainer" className="mt-4 h-48 overflow-y-auto">
+        <p id="resultText" className="whitespace-pre-line"></p>
+      </div>
+  );
+}
 
-  let placename;
-  if (selectedPlace){
-  placename = selectedPlace.name
-  }else{
-  placename = ""
-  }
+function HyperLink(){
+  return (
+    <div className="leftside">
+      <ul className="socialmediaicons">
+        <a href="https://instagram.com/projectcradle_sf?igshid=MzRlODBiNWFlZA==">
+          <li style={{ display: 'inline' }} key="instagram">
+            <i className="fa fa-instagram"></i>
+          </li>
+        </a>
+        <a href="https://www.youtube.com/watch?v=PjKbckberp0">
+          <li style={{ display: 'inline' }} key="youtube">
+            <i className="fa fa-youtube"></i>
+          </li>
+        </a>
+      </ul>
+    </div>
+  )
+}
 
-  let placeaddress;
-  if (selectedPlace){
-  placeaddress = selectedPlace.formatted_address
-  }else{
-  placeaddress = ""
-  }
-return (
+function ProjectInfo(){
+  return(
     <div>
-      <h1>Project Cradle</h1>
-      <GoogleSearchBox/>
-      {placename}
-      <br />
-      {placeaddress}
-      <br />
+    <h1>Project Cradle</h1>
+    <p className="text-gray-500 text-sm mb-2">Together, make the world better!</p>
+    <HyperLink/>
+    </div>
+  )
+}
+
+function ButtonArea(){
+  return (
+    <div className="flex justify-center mt-4">
       <GenerateButton/>
       <StopButton/>
-      <br />
+    </div>
+  )
+}
+
+function App() {
+return (
+    <div className="lg:w-1/2 2xl:w-1/3 p-8 rounded-md bg-gray-100">
+      <ProjectInfo/>
+      <GoogleSearchBox/>
+      <ButtonArea/>
       <InfoBox/>
-      <Profile/>
-      <ul>{listItems}</ul>
     </div>
   );
 }
