@@ -80,7 +80,7 @@ function GenerateButton() {
       const response = await fetch(API_URL, {
         method: "POST",
         body: JSON.stringify({
-          txt: "%petfriendly%"+placeId ,
+         api_input: "%petfriendly%"+placeId ,
         }),
         signal, // Pass the signal to the fetch request
       });
