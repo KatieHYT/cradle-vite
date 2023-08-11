@@ -112,7 +112,7 @@ function GenerateButton() {
         const responseBody = await response.text(); // Read the response as text
 	const parsedResponse = JSON.parse(responseBody);
         resultText.innerText = "";
-	resultText.innerText += "The Cradle team has received confirmation(" + parsedResponse.response.confirm_date + ") from the store manager(" + parsedResponse.response.manager + ") on the following:"
+	resultText.innerText += "The Cradle team has received confirmation(" + parsedResponse.response.manager_confirm_date + ") from the store manager(" + parsedResponse.response.manager_name + ") on the following:"
 	resultText.innerHTML += '<span style="white-space: pre;">\n\t</span>';
         resultText.innerHTML += "[ " + (parsedResponse.response.service_dog ? "O" : "X") + " ] Service dogs are allowed.";
 	resultText.innerHTML += '<span style="white-space: pre;">\n\t</span>';
