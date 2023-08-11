@@ -2,11 +2,12 @@ import React, { useState } from 'react';
 import { GoogleMap, LoadScript, Autocomplete } from '@react-google-maps/api';
 import GOOGLE_MAP_API_KEY from './api_key'; // Import the API key
 
-const API_URL = "https://4e01-140-112-41-151.ngrok-free.app/petlover/callback";
+const API_URL = "https://6fe8-140-112-41-151.ngrok-free.app/petlover/callback";
 let controller = null; // Store the AbortController instance
 let placeId;
 let placeName = "Enter a Location";
 let placeAddress = "";
+let service_dog = false;
 
 function StopButton() {
   function Stop() {
@@ -83,27 +84,45 @@ function GenerateButton() {
         }),
         signal, // Pass the signal to the fetch request
       });
+      const contentType = response.headers.get('content-type');
+      if (contentType && contentType.includes('text/event-stream')) {
+      //if (response.body && typeof response.body.getReader === "function") {
+	// Read the response as a stream of data
+        const reader = response.body.getReader();
+        const decoder = new TextDecoder("utf-8");
+        resultText.innerText = "";
   
-      // Read the response as a stream of data
-      const reader = response.body.getReader();
-      const decoder = new TextDecoder("utf-8");
-      resultText.innerText = "";
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) {
+            break;
+          }
+          // Massage and parse the chunk of data
+          const chunk = decoder.decode(value);
+          const parsedLines = chunk.split("\n");
   
-      while (true) {
-        const { done, value } = await reader.read();
-        if (done) {
-          break;
-        }
-        // Massage and parse the chunk of data
-        const chunk = decoder.decode(value);
-        const parsedLines = chunk.split("\n");
-  
-        for (const parsedLine of parsedLines) {
-          if (parsedLine) {
-            resultText.innerText += parsedLine;
+          for (const parsedLine of parsedLines) {
+            if (parsedLine) {
+              resultText.innerText += parsedLine;
+            }
           }
         }
+      } else if (contentType && contentType.includes('application/json')) {
+        // Response body is not a stream, handle accordingly
+        const responseBody = await response.text(); // Read the response as text
+	const parsedResponse = JSON.parse(responseBody);
+        resultText.innerText = "";
+	resultText.innerText += "The Cradle team has received confirmation(" + parsedResponse.response.confirm_date + ") from the store manager(" + parsedResponse.response.manager + ") on the following:"
+	resultText.innerHTML += '<span style="white-space: pre;">\n\t</span>';
+        resultText.innerHTML += "[ " + (parsedResponse.response.service_dog ? "O" : "X") + " ] Service dogs are allowed.";
+	resultText.innerHTML += '<span style="white-space: pre;">\n\t</span>';
+        resultText.innerHTML += "[ " + (parsedResponse.response.non_service_dog ? "O" : "X") + " ] Non-service dogs are allowed.";
+	resultText.innerHTML += '<span style="white-space: pre;">\n\t</span>';
+        resultText.innerHTML += "[ " + (parsedResponse.response.dog_treat ? "O" : "X") + " ] Dog treats are provided.";
+	resultText.innerHTML += '<span style="white-space: pre;">\n\t</span>';
+        resultText.innerHTML += "[ " + (parsedResponse.response.dog_water ? "O" : "X") + " ] Dog water are provided.";
       }
+    
     } catch (error) {
       // Handle fetch request errors
       if (signal.aborted) {
