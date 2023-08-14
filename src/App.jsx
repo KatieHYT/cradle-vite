@@ -180,7 +180,7 @@ function HyperLink(){
 function ProjectInfo(){
   return(
     <div>
-    <h1>Cradle</h1>
+    <h1>Cradle.wiki</h1>
     <p className="text-gray-500 text-sm mb-2">Together, make the world better!</p>
     <HyperLink/>
     </div>
