@@ -50,7 +50,6 @@ function GoogleSearchBox() {
           <input 
             type="text" 
             placeholder= {placeName + "    " + placeAddress}
-            style={{ width: '600px', height: '40px', fontSize: '16px' }}
             className="w-full px-4 py-2 rounded-md bg-gray-200 placeholder-gray-500 focus:outline-none mt-4"
           />
         </Autocomplete>
@@ -198,7 +197,7 @@ function ButtonArea(){
 
 function App() {
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 text-left bg-gray-100">
+    <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-8 text-left bg-gray-100">
       <ProjectInfo/>
       <GoogleSearchBox/>
       <ButtonArea/>
