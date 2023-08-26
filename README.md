@@ -22,13 +22,20 @@
 ## npm run (for dev testing)
 - Step-1:  
   Clone this repository and `cd` to `cradle-vite`.
-  
-- Step-2:  
+
+- Step-2: 
+  Create your `.env`file
+  ```
+  BACKEND_URL="https://xxxxxxxxxxxxxxxxxxx"
+  GOOGLE_MAP_API_KEY="xxxxxxxxxxxxxx"
+  ```
+   
+- Step-3:  
   Install dependency
   ```
   npm install
   ```
-- Step-3:
+- Step-4:
   Run the service
   ```
   npm run dev -- --port CUSTOM_PORT
