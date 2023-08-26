@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { GoogleMap, LoadScript, Autocomplete } from '@react-google-maps/api';
-import GOOGLE_MAP_API_KEY from './api_key'; // Import the API key
 
-const API_URL = "https://6fe8-140-112-41-151.ngrok-free.app/petlover/callback";
+// Load environment variables
+const GOOGLE_MAP_API_KEY = process.env.GOOGLE_MAP_API_KEY;
+const BACKEND_URL = process.env.BACKEND_URL;
+
 let controller = null; // Store the AbortController instance
 let placeId;
 let placeName = "Enter a Location";
@@ -76,7 +78,7 @@ function GenerateButton() {
   
     try {
       // Fetch the response from the OpenAI API with the signal from AbortController
-      const response = await fetch(API_URL, {
+      const response = await fetch(BACKEND_URL + "/petlover/callback", {
         method: "POST",
         body: JSON.stringify({
          api_input: "%petfriendly%"+placeId ,
