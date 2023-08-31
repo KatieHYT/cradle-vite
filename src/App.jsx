@@ -6,7 +6,8 @@ import TWILIO_ACCOUNT_SID from './api_key'; // Import the API key
 import TWILIO_AUTH_TOKEN from './api_key'; // Import the API key
 import TWILIO_FROM_NUMBER from './api_key'; // Import the API key
 
-const API_URL = "https://cca5-35-164-55-156.ngrok-free.app/petlover/callback";
+const REVIEW_API_URL = "https://cca5-35-164-55-156.ngrok-free.app/petlover/callback";
+const CALL_API_URL = "https://949f-35-89-9-90.ngrok-free.app/call";
 let controller = null; // Store the AbortController instance
 let placeId;
 let placeName = "Enter a Location";
@@ -55,7 +56,7 @@ function GenerateButton() {
   
     try {
       // Fetch the response from the OpenAI API with the signal from AbortController
-      const response = await fetch(API_URL, {
+      const response = await fetch(REVIEW_API_URL, {
         method: "POST",
         body: JSON.stringify({
          api_input: "%petfriendly%"+placeId ,
@@ -232,14 +233,14 @@ function CallButton() {
     resultText.innerText = "Calling...";
   
     try {
-      const client = require('twilio')(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN);
-      
-      client.messages
-            .create({
-               from: TWILIO_FROM_NUMBER,
-               to: phoneNumber
-             })
-            .then(message => console.log(message.sid));
+      const response = await fetch(CALL_API_URL, {
+             method: 'POST',
+             headers: {
+               'Content-Type': 'application/json',
+             },
+             body: JSON.stringify({ call_to: phoneNumber }),
+           });
+
     } catch (error) {
       // Handle fetch request errors
      console.error("Error:", error);
