@@ -1,13 +1,19 @@
 import React, { useState } from 'react';
 import { GoogleMap, LoadScript, Autocomplete } from '@react-google-maps/api';
-import GOOGLE_MAP_API_KEY from './api_key'; // Import the API key
 
-const API_URL = "https://6fe8-140-112-41-151.ngrok-free.app/petlover/callback";
+import GOOGLE_MAP_API_KEY from './api_key'; // Import the API key
+import TWILIO_ACCOUNT_SID from './api_key'; // Import the API key
+import TWILIO_AUTH_TOKEN from './api_key'; // Import the API key
+import TWILIO_FROM_NUMBER from './api_key'; // Import the API key
+
+const API_URL = "https://cca5-35-164-55-156.ngrok-free.app/petlover/callback";
 let controller = null; // Store the AbortController instance
 let placeId;
 let placeName = "Enter a Location";
 let placeAddress = "";
 let service_dog = false;
+
+let phoneNumber;
 
 function StopButton() {
   function Stop() {
@@ -29,33 +35,6 @@ function StopButton() {
 }
 
 
-function GoogleSearchBox() {
-  function DisplayDetail(autocomplete) {
-    autocomplete.addListener('place_changed', () => {
-      const place = autocomplete.getPlace();
-      if (!place.place_id) return;
-      //setPlaceId(place.place_id);
-      placeId = place.place_id
-      placeName = place.name
-      placeAddress = place.formatted_address
-    });
-  }
-
-  return (
-      <LoadScript googleMapsApiKey={GOOGLE_MAP_API_KEY} libraries={['places']}>
-        <Autocomplete
-          onLoad={DisplayDetail}
-          onPlaceChanged={() => {}}
-        >
-          <input 
-            type="text" 
-            placeholder= {placeName + "    " + placeAddress}
-            className="w-full px-4 py-2 rounded-md bg-gray-200 placeholder-gray-500 focus:outline-none mt-4"
-          />
-        </Autocomplete>
-      </LoadScript>
-  );
-}
 
 function GenerateButton() {
   async function Generate() {
@@ -186,11 +165,107 @@ function ProjectInfo(){
   )
 }
 
+
+function GoogleSearchBox() {
+  function DisplayDetail(autocomplete) {
+    autocomplete.addListener('place_changed', () => {
+      const place = autocomplete.getPlace();
+      if (!place.place_id) return;
+      //setPlaceId(place.place_id);
+      placeId = place.place_id
+      placeName = place.name
+      placeAddress = place.formatted_address
+    });
+  }
+
+  return (
+      <LoadScript googleMapsApiKey={GOOGLE_MAP_API_KEY} libraries={['places']}>
+        <Autocomplete
+          onLoad={DisplayDetail}
+          onPlaceChanged={() => {}}
+        >
+          <input 
+            type="text" 
+            placeholder= {placeName + "    " + placeAddress}
+            className="w-full px-4 py-2 rounded-md bg-gray-200 placeholder-gray-500 focus:outline-none mt-4"
+          />
+        </Autocomplete>
+      </LoadScript>
+  );
+}
 function ButtonArea(){
   return (
     <div className="flex justify-center mt-4">
       <GenerateButton/>
       <StopButton/>
+    </div>
+  )
+}
+
+function PhoneNumberBox() {
+  const handleChange = (event) => {
+    phoneNumber = event.target.value; // Update phoneNumber directly
+  }
+
+  return (
+    <div>
+      <input
+        type="text"
+        placeholder="Phone Number"
+        className="w-1/2 px-4 py-2 rounded-md bg-gray-200 placeholder-gray-500 focus:outline-none mt-4"
+        onChange={handleChange}
+      />
+    </div>
+  );
+}
+
+function CallButton() {
+  async function Call() {
+    // Alert the user if no prompt value
+    callBtn.disabled = true;
+    if (!phoneNumber) {
+      alert("Please enter phone number.");
+      return;
+    }
+  
+    // Disable the generate button and enable the stop button
+    resultText.innerText = "Calling...";
+  
+    try {
+      const client = require('twilio')(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN);
+      
+      client.messages
+            .create({
+               from: TWILIO_FROM_NUMBER,
+               to: phoneNumber
+             })
+            .then(message => console.log(message.sid));
+    } catch (error) {
+      // Handle fetch request errors
+     console.error("Error:", error);
+     resultText.innerText = "Error occurred while calling.";
+     }
+    finally {
+      // Enable the generate button and disable the stop button
+      callBtn.disabled = false;
+    }
+  };
+  return (
+    <button 
+      id="callBtn" 
+      onClick={Call}
+      className="w-1/5 px-4 py-2 rounded-md bg-black text-white hover:bg-gray-900 focus:outline-none mr-2 disabled:opacity-75 disabled:cursor-not-allowed"
+    >
+        Call
+    </button>
+  );
+}
+
+function CallArea(){
+  return (
+    <div className="mt-2">
+      <PhoneNumberBox/>
+      <CallButton/>
     </div>
   )
 }
@@ -201,6 +276,7 @@ function App() {
       <ProjectInfo/>
       <GoogleSearchBox/>
       <ButtonArea/>
+      <CallArea/>
       <InfoBox/>
     </div>
   );
