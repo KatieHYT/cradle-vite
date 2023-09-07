@@ -1,13 +1,7 @@
 import React, { useState } from 'react';
 import { GoogleMap, LoadScript, Autocomplete } from '@react-google-maps/api';
 
-import GOOGLE_MAP_API_KEY from './api_key'; // Import the API key
-import TWILIO_ACCOUNT_SID from './api_key'; // Import the API key
-import TWILIO_AUTH_TOKEN from './api_key'; // Import the API key
-import TWILIO_FROM_NUMBER from './api_key'; // Import the API key
-
-const REVIEW_API_URL = "https://cca5-35-164-55-156.ngrok-free.app/petlover/callback";
-const CALL_API_URL = "https://949f-35-89-9-90.ngrok-free.app/call";
+import {GOOGLE_MAP_API_KEY, REVIEW_API_URL, CALL_API_URL} from './api_key'; // Import the API key
 let controller = null; // Store the AbortController instance
 let placeId;
 let placeName = "Enter a Location";
