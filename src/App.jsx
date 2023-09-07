@@ -122,15 +122,6 @@ function GenerateButton() {
   );
 }
 
-function InfoBox() {
-  return (
-      <div id="resultContainer" className="mt-4 h-48 overflow-y-auto">
-        <p id="resultText" className="whitespace-pre-line"></p>
-      </div>
-  );
-}
-
-
 function HyperLink(){
   return (
     <div className="leftside">
@@ -224,7 +215,7 @@ function CallButton() {
     }
   
     // Disable the generate button and enable the stop button
-    resultText.innerText = "Calling...";
+    resultTextCall.innerText = "Calling...";
   
     try {
       const response = await fetch(CALL_API_URL, {
@@ -238,7 +229,7 @@ function CallButton() {
     } catch (error) {
       // Handle fetch request errors
      console.error("Error:", error);
-     resultText.innerText = "Error occurred while calling.";
+     resultTextCall.innerText = "Error occurred while calling.";
      }
     finally {
       // Enable the generate button and disable the stop button
@@ -265,6 +256,35 @@ function CallArea(){
   )
 }
 
+function InfoBoxCall() {
+  return (
+      <div className="mt-4 h-40 w-full overflow-y-auto">
+        <p id="resultTextCall"></p>
+      </div>
+  );
+}
+
+function InfoBoxReview() {
+  return (
+      <div className="mt-4 h-40 w-full overflow-y-auto">
+        <p id="resultText" className="whitespace-pre-line"></p>
+      </div>
+  );
+}
+
+function ScrollArea() {
+  return (
+	   <div className="flex mt-4">
+	     <div className="flex-1">
+	       <InfoBoxCall />
+	     </div>
+	     <div className="flex-1 ml-4"> {/* Add ml-4 for spacing */}
+	       <InfoBoxReview />
+	     </div>
+	   </div>
+	 );
+}
+
 function App() {
   return (
     <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-8 text-left bg-gray-100">
@@ -272,7 +292,7 @@ function App() {
       <GoogleSearchBox/>
       <ButtonArea/>
       <CallArea/>
-      <InfoBox/>
+      <ScrollArea/>
     </div>
   );
 }
