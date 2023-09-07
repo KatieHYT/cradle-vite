@@ -260,6 +260,7 @@ function InfoBoxCall() {
   return (
       <div className="mt-4 h-40 w-full overflow-y-auto">
         <p id="resultTextCall"></p>
+        <CallButton/>
       </div>
   );
 }
