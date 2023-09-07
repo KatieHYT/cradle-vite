@@ -10,7 +10,7 @@ let service_dog = false;
 
 let phoneNumber;
 
-function StopButton() {
+function StopReviewButton() {
   function Stop() {
     // Abort the fetch request by calling abort() on the AbortController instance
     if (controller) {
@@ -31,7 +31,7 @@ function StopButton() {
 
 
 
-function GenerateButton() {
+function GenerateReviewButton() {
   async function Generate() {
     // Alert the user if no prompt value
     if (!placeId) {
@@ -117,7 +117,7 @@ function GenerateButton() {
       onClick={Generate}
       className="w-4/5 px-4 py-2 rounded-md bg-black text-white hover:bg-gray-900 focus:outline-none mr-2 disabled:opacity-75 disabled:cursor-not-allowed"
     >
-        Sniffing out Pet-friendliness in the Selected Place
+        Summarize Google Reviews
     </button>
   );
 }
@@ -179,11 +179,11 @@ function GoogleSearchBox() {
       </LoadScript>
   );
 }
-function ButtonArea(){
+function ReviewButtonArea(){
   return (
     <div className="flex justify-center mt-4">
-      <GenerateButton/>
-      <StopButton/>
+      <GenerateReviewButton/>
+      <StopReviewButton/>
     </div>
   )
 }
@@ -260,7 +260,7 @@ function InfoBoxCall() {
   return (
       <div className="mt-4 h-40 w-full overflow-y-auto">
         <p id="resultTextCall"></p>
-        <CallButton/>
+        <CallArea/>
       </div>
   );
 }
@@ -269,6 +269,7 @@ function InfoBoxReview() {
   return (
       <div className="mt-4 h-40 w-full overflow-y-auto">
         <p id="resultText" className="whitespace-pre-line"></p>
+        <ReviewButtonArea/>
       </div>
   );
 }
@@ -286,14 +287,29 @@ function ScrollArea() {
 	 );
 }
 
+function Sniff() {
+  const [showScrollArea, setShowScrollArea] = useState(false);
+
+  return (
+	  <div>
+	    <button 
+	     onClick={() => setShowScrollArea(!showScrollArea)}
+             className="w-1/5 px-4 py-2 rounded-md bg-black text-white hover:bg-gray-900 focus:outline-none mr-2 disabled:opacity-75 disabled:cursor-not-allowed"
+	  >
+	      Sniff
+	    </button>
+	    {showScrollArea && <ScrollArea />}
+	  </div>
+	    );
+}
+
+
 function App() {
   return (
     <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-8 text-left bg-gray-100">
       <ProjectInfo/>
       <GoogleSearchBox/>
-      <ButtonArea/>
-      <CallArea/>
-      <ScrollArea/>
+      <Sniff/>
     </div>
   );
 }
