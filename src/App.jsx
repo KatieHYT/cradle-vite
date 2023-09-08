@@ -259,7 +259,9 @@ function CallArea(){
 function InfoBoxCall() {
   return (
       <div className="mt-4 h-40 w-full overflow-y-auto">
-        <p id="resultTextCall"></p>
+        <p id="resultTextCall">
+        The place has not yet been called.
+	</p>
         <CallArea/>
       </div>
   );
@@ -268,7 +270,9 @@ function InfoBoxCall() {
 function InfoBoxReview() {
   return (
       <div className="mt-4 h-40 w-full overflow-y-auto">
-        <p id="resultText" className="whitespace-pre-line"></p>
+        <p id="resultText" className="whitespace-pre-line">
+        The place has not yet been parsed.
+	</p>
         <ReviewButtonArea/>
       </div>
   );
