@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { GoogleMap, LoadScript, Autocomplete } from '@react-google-maps/api';
 
 import {GOOGLE_MAP_API_KEY, REVIEW_API_URL, CALL_API_URL} from './api_key'; // Import the API key
@@ -8,7 +8,7 @@ let placeName = "Enter a Location";
 let placeAddress = "";
 let service_dog = false;
 
-let phoneNumber;
+let phoneNumber="4156054429";
 
 function StopReviewButton() {
   function Stop() {
@@ -117,7 +117,7 @@ function GenerateReviewButton() {
       onClick={Generate}
       className="w-4/5 px-4 py-2 rounded-md bg-black text-white hover:bg-gray-900 focus:outline-none mr-2 disabled:opacity-75 disabled:cursor-not-allowed"
     >
-        Summarize Google Reviews
+	  Summarize Reviews
     </button>
   );
 }
@@ -200,6 +200,7 @@ function PhoneNumberBox() {
         placeholder="Phone Number"
         className="w-1/2 px-4 py-2 rounded-md bg-gray-200 placeholder-gray-500 focus:outline-none mt-4"
         onChange={handleChange}
+	value={phoneNumber}
       />
     </div>
   );
@@ -225,6 +226,8 @@ function CallButton() {
              },
              body: JSON.stringify({ call_to: phoneNumber }),
            });
+      //const contentType = response.headers.get('content-type');
+      //console.log(contentType) //application/json
 
     } catch (error) {
       // Handle fetch request errors
@@ -257,10 +260,34 @@ function CallArea(){
 }
 
 function InfoBoxCall() {
+
+  useEffect(() => {
+	      // This code will run after the component has been mounted (displayed)
+	  checkCall(); // Call the checkCall function once the component is mounted
+	    }, []); // The empty dependency array ensures it runs only once, like componentDidMount
+	  //
+  async function checkCall() {
+      // Fetch the response from the OpenAI API with the signal from AbortController
+      const response = await fetch(REVIEW_API_URL, {
+        method: "POST",
+        body: JSON.stringify({
+         api_input: "%checkcall%"+placeId ,
+        }),
+      });
+     // Response body is not a stream, handle accordingly
+     const responseBody = await response.text(); // Read the response as text
+     const parsedResponse = JSON.parse(responseBody);
+     resultTextCall.innerText = "";
+     if (parsedResponse.call_conversation === null){
+     resultTextCall.innerText += "The place has not yet been called."
+    }else{
+     resultTextCall.innerText += parsedResponse.call_conversation 
+    }
+    }
+
   return (
       <div className="mt-4 h-40 w-full overflow-y-auto">
         <p id="resultTextCall">
-        The place has not yet been called.
 	</p>
         <CallArea/>
       </div>
@@ -268,10 +295,32 @@ function InfoBoxCall() {
 }
 
 function InfoBoxReview() {
+  useEffect(() => {
+	      // This code will run after the component has been mounted (displayed)
+	  checkReview(); // Call the checkCall function once the component is mounted
+	    }, []); // The empty dependency array ensures it runs only once, like componentDidMount
+	  //
+  async function checkReview() {
+      // Fetch the response from the OpenAI API with the signal from AbortController
+      const response = await fetch(REVIEW_API_URL, {
+        method: "POST",
+        body: JSON.stringify({
+         api_input: "%checkreview%"+placeId ,
+        }),
+      });
+     // Response body is not a stream, handle accordingly
+     const responseBody = await response.text(); // Read the response as text
+     const parsedResponse = JSON.parse(responseBody);
+     resultText.innerText = "";
+     if (parsedResponse.review_summary === null){
+     resultText.innerText += "The place has not yet been parsed."
+    }else{
+     resultText.innerText += parsedResponse.review_summary
+    }
+  }
   return (
       <div className="mt-4 h-40 w-full overflow-y-auto">
         <p id="resultText" className="whitespace-pre-line">
-        The place has not yet been parsed.
 	</p>
         <ReviewButtonArea/>
       </div>
@@ -293,7 +342,7 @@ function ScrollArea() {
 
 function Sniff() {
   const [showScrollArea, setShowScrollArea] = useState(false);
-
+  
   return (
 	  <div>
 	    <button 
