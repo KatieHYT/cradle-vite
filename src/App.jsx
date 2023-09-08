@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import NavigationBar from './components/NavigationBar';
 import { GoogleMap, LoadScript, Autocomplete } from '@react-google-maps/api';
 
+import './App.css'; // Import the CSS file
+
 import {GOOGLE_MAP_API_KEY, REVIEW_API_URL, CALL_API_URL, CHECKCALL_API_URL} from './api_key'; // Import the API key
 //
 let controller = null; // Store the AbortController instance
@@ -317,8 +319,8 @@ function InfoBoxCall() {
     }
   }
   return (
-      <div className="mt-4 h-40 w-full overflow-y-auto">
-        <p id="resultTextCall" style={{ fontSize: '10px' }} >
+      <div className="mt-4 h-40 w-full overflow-y-auto custom-scrollbar">
+        <p id="resultTextCall" style={{ fontSize: '12px' }} >
 	</p>
         <CallArea/>
       </div>
@@ -350,8 +352,8 @@ function InfoBoxReview() {
     }
   }
   return (
-      <div className="mt-4 h-40 w-full overflow-y-auto">
-        <p id="resultText" className="whitespace-pre-line" style={{ fontSize: '10px' }}>
+      <div className="mt-4 h-40 w-full overflow-y-auto custom-scrollbar">
+        <p id="resultText" className="whitespace-pre-line" style={{ fontSize: '12px' }}>
 	</p>
         <ReviewButtonArea/>
       </div>
