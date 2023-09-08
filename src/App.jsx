@@ -8,7 +8,8 @@ let placeName = "Enter a Location";
 let placeAddress = "";
 let service_dog = false;
 
-let phoneNumber="4156054429";
+let phoneNumber;
+let latlng;
 
 function StopReviewButton() {
   function Stop() {
@@ -271,20 +272,27 @@ function InfoBoxCall() {
       const response = await fetch(REVIEW_API_URL, {
         method: "POST",
         body: JSON.stringify({
-         api_input: "%checkcall%"+placeId ,
+         api_input: "%callinfo%"+placeId ,
         }),
       });
      // Response body is not a stream, handle accordingly
      const responseBody = await response.text(); // Read the response as text
      const parsedResponse = JSON.parse(responseBody);
-     resultTextCall.innerText = "";
-     if (parsedResponse.call_conversation === null){
-     resultTextCall.innerText += "The place has not yet been called."
-    }else{
-     resultTextCall.innerText += parsedResponse.call_conversation 
-    }
-    }
+     latlng = parsedResponse.latlng
+     phoneNumber = parsedResponse.phone_number
 
+     resultTextCall.innerText = "";
+     resultTextCall.innerText += latlng + " %%%%   " + phoneNumber
+
+     //post latlng to flask to get call_conversation
+     
+    // resultTextCall.innerText = "";
+    // if (parsedResponse.call_conversation === null){
+    // resultTextCall.innerText += "The place has not yet been called."
+    //}else{
+    // resultTextCall.innerText += parsedResponse.call_conversation
+    //}
+  }
   return (
       <div className="mt-4 h-40 w-full overflow-y-auto">
         <p id="resultTextCall">
