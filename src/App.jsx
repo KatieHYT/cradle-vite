@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { GoogleMap, LoadScript, Autocomplete } from '@react-google-maps/api';
 
-import {GOOGLE_MAP_API_KEY, REVIEW_API_URL, CALL_API_URL} from './api_key'; // Import the API key
+import {GOOGLE_MAP_API_KEY, REVIEW_API_URL, CALL_API_URL, CHECKCALL_API_URL} from './api_key'; // Import the API key
+//
 let controller = null; // Store the AbortController instance
 let placeId;
 let placeName = "Enter a Location";
@@ -269,7 +270,7 @@ function InfoBoxCall() {
 	  //
   async function checkCall() {
       // Fetch the response from the OpenAI API with the signal from AbortController
-      const response = await fetch(REVIEW_API_URL, {
+     const response = await fetch(REVIEW_API_URL, {
         method: "POST",
         body: JSON.stringify({
          api_input: "%callinfo%"+placeId ,
@@ -281,10 +282,23 @@ function InfoBoxCall() {
      latlng = parsedResponse.latlng
      phoneNumber = parsedResponse.phone_number
 
+     //resultTextCall.innerText = "";
+     //resultTextCall.innerText += latlng + " %%%%   " + phoneNumber
+     
+     console.log(phoneNumber)
+     const response_call = await fetch(CHECKCALL_API_URL, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ latlng: latlng }),
+          });
+     const responseBody_call = await response_call.text(); // Read the response as text
+     console.log(responseBody_call)
+     const parsedResponse_call = JSON.parse(responseBody_call);
      resultTextCall.innerText = "";
-     resultTextCall.innerText += latlng + " %%%%   " + phoneNumber
-
-     //post latlng to flask to get call_conversation
+     resultTextCall.innerText += parsedResponse_call.call_conversation;
+     //KTpost latlng to flask to get call_conversation
      
     // resultTextCall.innerText = "";
     // if (parsedResponse.call_conversation === null){
