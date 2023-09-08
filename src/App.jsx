@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import NavigationBar from './components/NavigationBar';
 import { GoogleMap, LoadScript, Autocomplete } from '@react-google-maps/api';
 
 import {GOOGLE_MAP_API_KEY, REVIEW_API_URL, CALL_API_URL, CHECKCALL_API_URL} from './api_key'; // Import the API key
@@ -390,6 +391,7 @@ function Sniff() {
 function App() {
   return (
     <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-8 text-left bg-gray-100">
+      <NavigationBar />
       <ProjectInfo/>
       <GoogleSearchBox/>
       <Sniff/>
