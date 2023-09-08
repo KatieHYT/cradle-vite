@@ -202,7 +202,6 @@ function PhoneNumberBox() {
         placeholder="Phone Number"
         className="w-1/2 px-4 py-2 rounded-md bg-gray-200 placeholder-gray-500 focus:outline-none mt-4"
         onChange={handleChange}
-	value={phoneNumber}
       />
     </div>
   );
@@ -226,7 +225,10 @@ function CallButton() {
              headers: {
                'Content-Type': 'application/json',
              },
-             body: JSON.stringify({ call_to: phoneNumber }),
+             body: JSON.stringify({ 
+		     call_to: phoneNumber,
+		     latlng: latlng,
+	     }),
            });
       //const contentType = response.headers.get('content-type');
       //console.log(contentType) //application/json
@@ -296,20 +298,17 @@ function InfoBoxCall() {
      const responseBody_call = await response_call.text(); // Read the response as text
      console.log(responseBody_call)
      const parsedResponse_call = JSON.parse(responseBody_call);
-     resultTextCall.innerText = "";
-     resultTextCall.innerText += parsedResponse_call.call_conversation;
-     //KTpost latlng to flask to get call_conversation
      
-    // resultTextCall.innerText = "";
-    // if (parsedResponse.call_conversation === null){
-    // resultTextCall.innerText += "The place has not yet been called."
-    //}else{
-    // resultTextCall.innerText += parsedResponse.call_conversation
-    //}
+     resultTextCall.innerText = "";
+     if (parsedResponse_call.call_conversation === null){
+     resultTextCall.innerText += "The place has not yet been called."
+    }else{
+     resultTextCall.innerText += parsedResponse_call.call_conversation
+    }
   }
   return (
       <div className="mt-4 h-40 w-full overflow-y-auto">
-        <p id="resultTextCall">
+        <p id="resultTextCall" style={{ fontSize: '10px' }} >
 	</p>
         <CallArea/>
       </div>
@@ -342,7 +341,7 @@ function InfoBoxReview() {
   }
   return (
       <div className="mt-4 h-40 w-full overflow-y-auto">
-        <p id="resultText" className="whitespace-pre-line">
+        <p id="resultText" className="whitespace-pre-line" style={{ fontSize: '10px' }}>
 	</p>
         <ReviewButtonArea/>
       </div>
