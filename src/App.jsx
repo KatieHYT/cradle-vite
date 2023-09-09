@@ -25,7 +25,7 @@ const buttonStyleNav = {
      padding: '1px 2px',  // Adjust the padding as needed
      fontSize: '10px',  // Adjust the font size as needed
      width: '70px',  // Adjust the font size as needed  
-     marginLeft: '500px', // Adjust the margin as needed
+     marginLeft: '75%', // Adjust the margin as needed
                       };
 
 function StopReviewButton() {
