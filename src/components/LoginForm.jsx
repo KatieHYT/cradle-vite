@@ -35,7 +35,7 @@ function LoginForm({ onUserUpdate }) {
           onUserUpdate(formData.username);
 	}
 	else if(parsedResponse.login_status==="username_not_exist"){
-          console.log("Username not exist")
+          alert("Username not exist..");
 	}
       } else {
         // Handle login error here

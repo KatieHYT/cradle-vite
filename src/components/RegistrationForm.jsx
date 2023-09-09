@@ -33,12 +33,12 @@ function RegistrationForm({ onUserUpdate }) {
 
       if (response.ok) {
 	if(parsedResponse.register_status==="successfully_registered"){
-          console.log("Successfully Registered")
           onUserUpdate(formData.username);
+          alert("Successfully Registered");
 	}
 	else if(parsedResponse.register_status==="username_repeated"){
-          console.log("Username repeated")
           onUserUpdate(formData.username);
+          alert("Username exist. Welcome back!");
 	}
         // Handle successful registration here
       } else {
