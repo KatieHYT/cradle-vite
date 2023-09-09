@@ -391,9 +391,20 @@ function Sniff() {
 
 
 function App() {
+  const [user, setUser] = useState(null);
+
+  const handleUserUpdate = (newUser) => {
+    setUser(newUser);
+  };
+
   return (
     <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-8 text-left bg-gray-100">
-      <NavigationBar />
+      {user ? (
+            <div className="welcome-message">Hi {user}</div>
+          ) : (
+            <NavigationBar onUserUpdate={handleUserUpdate} />
+          )}
+
       <ProjectInfo/>
       <GoogleSearchBox/>
       <Sniff/>

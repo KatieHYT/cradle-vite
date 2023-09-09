@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import './RegistrationForm.css'; // Import the CSS file
 import {REVIEW_API_URL} from '../api_key'; // Import the API key
 
-function RegistrationForm() {
+function RegistrationForm({ onUserUpdate }) {
   const [formData, setFormData] = useState({
     api_input: '%register%',
     username: '',
@@ -34,9 +34,11 @@ function RegistrationForm() {
       if (response.ok) {
 	if(parsedResponse.register_status==="successfully_registered"){
           console.log("Successfully Registered")
+          onUserUpdate(formData.username);
 	}
 	else if(parsedResponse.register_status==="username_repeated"){
           console.log("Username repeated")
+          onUserUpdate(formData.username);
 	}
         // Handle successful registration here
       } else {

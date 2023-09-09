@@ -3,11 +3,11 @@ import RegisterButton from './RegisterButton';
 import LoginButton from './LoginButton';
 import './NavigationBar.css'; // Import the CSS file
 
-function NavigationBar() {
+function NavigationBar({ onUserUpdate }) {
 	  return (
 		      <nav className="navbar">
 		        <div className="navbar-buttons">
-		          <RegisterButton />
+		          <RegisterButton onUserUpdate={onUserUpdate} />
 		          <LoginButton />
 		        </div>
 		      </nav>
