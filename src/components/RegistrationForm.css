@@ -1,0 +1,17 @@
+/* styles.css */
+.gray-background {
+  background-color: #f2f2f2; /* Use your desired gray color */
+  padding: 2px; /* Add padding for spacing */
+}
+
+.gray-button {
+  background-color: #808080; /* Use your desired gray color */
+  color: #fff; /* Text color */
+  padding: 10px 20px; /* Add padding for spacing */
+  border: none; /* Remove border */
+  cursor: pointer; /* Add a pointer cursor on hover */
+}
+
+.gray-button:hover {
+  background-color: #606060; /* Change color on hover */
+}

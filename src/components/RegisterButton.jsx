@@ -1,14 +1,17 @@
-import React from 'react';
-
+import React, { useState, useEffect } from 'react';
+import RegistrationForm from './RegistrationForm'
 function RegisterButton() {
-// Add your registration button UI here
+   const [showRegistration, setShowRegistration] = useState(false);
+   const toggleRegistration = () => {
+       setShowRegistration(!showRegistration);
+     };
    return (
-       <button onClick={handleRegisterClick}>Register</button>
-         );
+     <div>
+       <button onClick={toggleRegistration}>Register</button>
+	   {showRegistration && <RegistrationForm onClose={toggleRegistration}/>} 
+     </div>
+   );
 
-           function handleRegisterClick() {
-               // Add code to handle the registration logic
-                 }
                  }
 
                  export default RegisterButton;
