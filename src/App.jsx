@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import NavigationBar from './components/NavigationBar';
+import Leaderboard from './components/Leaderboard';
 import { GoogleMap, LoadScript, Autocomplete } from '@react-google-maps/api';
 
 import './App.css'; // Import the CSS file
@@ -395,6 +396,7 @@ function App() {
   return (
     <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-8 text-left bg-gray-100">
       <NavigationBar/>
+      <Leaderboard/>
       <ProjectInfo/>
       <GoogleSearchBox/>
       <Sniff/>

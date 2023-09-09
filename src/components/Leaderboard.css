@@ -1,0 +1,15 @@
+.leaderboard {
+	  display: flex;
+	    justify-content: flex-end; /* This aligns the content to the right */
+	      align-items: center; /* This vertically centers the content */
+	        padding: 10px;
+		  position: absolute; /* Position the navbar absolutely */
+		    top: 0; /* Stick it to the top of the parent container */
+		      left: 0; /* Stick it to the right of the parent container */
+		        background-color: #ffffff; /* Optional: Add a background color */
+		}
+
+.leaderboard button {
+	  margin-left: 10px;
+	  color: white; /* Set text color to white */
+  }
