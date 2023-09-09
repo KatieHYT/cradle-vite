@@ -4,11 +4,7 @@ import './Leaderboard.css'; // Import the CSS file
 
 function Leaderboard() {
 	  return (
-		      <nav className="leaderboard">
-		        <div className="leaderboard-buttons">
 		          <LeaderboardButton />
-		        </div>
-		      </nav>
 		    );
 }
 

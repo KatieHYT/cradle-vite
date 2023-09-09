@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import RegisterButton from './RegisterButton';
 import LoginButton from './LoginButton';
-import './NavigationBar.css'; // Import the CSS file
 
 function NavigationBar() {
   const [user, setUser] = useState(null);
@@ -9,9 +8,7 @@ function NavigationBar() {
   const handleUserUpdate = (newUser) => {
     setUser(newUser);
   };
-	  return (
-		      <nav className="navbar">
-		        <div className="navbar-buttons">
+	  return ( <div>
                         {user ? (
                               <div className="welcome-message">Hi {user}</div>
                             ) : (
@@ -20,8 +17,7 @@ function NavigationBar() {
 		              <LoginButton onUserUpdate={handleUserUpdate}/>
 			      </div>
                             )}
-		        </div>
-		      </nav>
+		  </div>
 		    );
 }
 

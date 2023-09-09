@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import NavigationBar from './components/NavigationBar';
-import Leaderboard from './components/Leaderboard';
+//import NavigationBar from './components/NavigationBar';
+//import Leaderboard from './components/Leaderboard';
 import { GoogleMap, LoadScript, Autocomplete } from '@react-google-maps/api';
 
 import './App.css'; // Import the CSS file
@@ -17,8 +17,14 @@ let phoneNumber;
 let latlng;
 
 const buttonStyle = {
-     padding: '2px 4px',  // Adjust the padding as needed
-     fontSize: '12px',  // Adjust the font size as needed
+     padding: '1px 2px',  // Adjust the padding as needed
+     fontSize: '10px',  // Adjust the font size as needed
+                      };
+
+const buttonStyleNav = {
+     padding: '1px 2px',  // Adjust the padding as needed
+     fontSize: '10px',  // Adjust the font size as needed
+     width: '70px',  // Adjust the font size as needed
                       };
 
 function StopReviewButton() {
@@ -390,6 +396,245 @@ function Sniff() {
 	    );
 }
 
+function LeaderboardButton() {
+   const [showLeaderboard, setShowLeaderboard] = useState(false);
+   const toggleLeaderboard = () => {
+       setShowLeaderboard(!showLeaderboard);
+     };
+   return (
+     <div>
+       <button 
+	   onClick={toggleLeaderboard}
+      style={buttonStyleNav}
+      className="w-1/5 px-4 py-2 rounded-md bg-black text-white hover:bg-gray-900 focus:outline-none mr-2 disabled:opacity-75 disabled:cursor-not-allowed"
+	    
+>Leaderboard
+       </button>
+	   {showLeaderboard && "hello"} 
+     </div>
+   );
+                 }
+
+function Leaderboard() {
+	  return (
+		          <LeaderboardButton />
+		    );
+}
+
+
+function RegisterButton({ onUserUpdate }) {
+   const [showRegistration, setShowRegistration] = useState(false);
+   const toggleRegistration = () => {
+       setShowRegistration(!showRegistration);
+     };
+   return (
+     <div>
+       <button 
+	   onClick={toggleRegistration}
+      style={buttonStyleNav}
+      className="w-1/5 px-4 py-2 rounded-md bg-black text-white hover:bg-gray-900 focus:outline-none mr-2 disabled:opacity-75 disabled:cursor-not-allowed"
+
+	   >Register</button>
+	   {showRegistration && <RegistrationForm onClose={toggleRegistration} onUserUpdate={onUserUpdate}/>} 
+     </div>
+   );
+
+                 }
+
+function LoginButton({ onUserUpdate }) {
+   const [showLogin, setShowLogin] = useState(false);
+   const toggleLogin = () => {
+       setShowLogin(!showLogin);
+     };
+  // Add your login button UI here
+    return (
+        <div>
+	    <button
+	    onClick={toggleLogin}
+      style={buttonStyleNav}
+      className="w-1/5 px-4 py-2 rounded-md bg-black text-white hover:bg-gray-900 focus:outline-none mr-2 disabled:opacity-75 disabled:cursor-not-allowed"
+
+	    >Login</button>
+	   {showLogin && <LoginForm onClose={toggleLogin} onUserUpdate={onUserUpdate}/>} 
+    </div>      
+    );
+
+                  }
+
+function NavigationBar() {
+  const [user, setUser] = useState(null);
+
+  const handleUserUpdate = (newUser) => {
+    setUser(newUser);
+  };
+	  return ( <div>
+                        {user ? (
+                              <div className="welcome-message">Hi {user}</div>
+                            ) : (
+			      <div className="">
+		              <RegisterButton onUserUpdate={handleUserUpdate} />
+		              <LoginButton onUserUpdate={handleUserUpdate}/>
+			      </div>
+                            )}
+		  </div>
+		    );
+}
+
+function RegistrationForm({ onUserUpdate }) {
+  const [formData, setFormData] = useState({
+    api_input: '%register%',
+    username: '',
+    email: '',
+    phonenumber: '',
+  });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    
+    try {
+      const response = await fetch(REVIEW_API_URL, {
+        method: 'POST',
+        body: JSON.stringify(formData),
+        },
+      );
+
+      const responseBody = await response.text(); // Read the response as text
+      const parsedResponse = JSON.parse(responseBody);
+
+      if (response.ok) {
+	if(parsedResponse.register_status==="successfully_registered"){
+          onUserUpdate(formData.username);
+          alert("Successfully Registered");
+	}
+	else if(parsedResponse.register_status==="username_repeated"){
+          onUserUpdate(formData.username);
+          alert("Username exist. Welcome back!");
+	}
+        // Handle successful registration here
+      } else {
+        // Handle registration error here
+        console.error('Registration failed');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
+
+  return (
+    <div>
+      <h2>Registration Form</h2>
+      <form onSubmit={handleSubmit}>
+        <div>
+          <label>Username:</label>
+          <input
+	    className="gray-background"
+            type="text"
+            name="username"
+            value={formData.username}
+            onChange={handleChange}
+          />
+        </div>
+        <div>
+          <label>Email:</label>
+          <input
+	    className="gray-background"
+            type="email"
+            name="email"
+            value={formData.email}
+            onChange={handleChange}
+          />
+        </div>
+        <div>
+          <label>Phone Number:</label>
+          <input
+	    className="gray-background"
+            type="phonenumber"
+            name="phonenumber"
+            value={formData.phonenumber}
+            onChange={handleChange}
+          />
+        </div>
+        <div>
+          <button type="submit" className="gray-button">Register</button>
+        </div>
+      </form>
+    </div>
+  );
+}
+function LoginForm({ onUserUpdate }) {
+  const [formData, setFormData] = useState({
+    api_input: '%login%',
+    username: '',
+  });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      // Send a POST request to your authentication endpoint
+      const response = await fetch(REVIEW_API_URL, {
+        method: 'POST',
+        body: JSON.stringify(formData),
+      });
+
+      const responseBody = await response.text(); // Read the response as text
+      const parsedResponse = JSON.parse(responseBody);
+
+      if (response.ok) {
+        // Handle successful login here
+	if(parsedResponse.login_status==="username_exist"){
+          console.log("Successfully Log in")
+          onUserUpdate(formData.username);
+	}
+	else if(parsedResponse.login_status==="username_not_exist"){
+          alert("Username not exist..");
+	}
+      } else {
+        // Handle login error here
+        console.error('Login failed');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
+
+  return (
+    <div>
+      <form onSubmit={handleSubmit}>
+        <div>
+          <label>Username:</label>
+          <input
+	    className="gray-background"
+            type="text"
+            name="username"
+            value={formData.username}
+            onChange={handleChange}
+          />
+        </div>
+        <div>
+          <button type="submit" className="gray-button">Login</button>
+        </div>
+      </form>
+    </div>
+  );
+  // ...
+}
 
 function App() {
 
