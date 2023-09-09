@@ -17,7 +17,7 @@ function NavigationBar() {
                             ) : (
 			      <div>
 		              <RegisterButton onUserUpdate={handleUserUpdate} />
-		              <LoginButton />
+		              <LoginButton onUserUpdate={handleUserUpdate}/>
 			      </div>
                             )}
 		        </div>

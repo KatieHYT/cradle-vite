@@ -1,14 +1,19 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import LoginForm from './LoginForm'
 
-function LoginButton() {
+function LoginButton({ onUserUpdate }) {
+   const [showLogin, setShowLogin] = useState(false);
+   const toggleLogin = () => {
+       setShowLogin(!showLogin);
+     };
   // Add your login button UI here
     return (
-        <button onClick={handleLoginClick}>Login</button>
-          );
+        <div>
+	    <button onClick={toggleLogin}>Login</button>
+	   {showLogin && <LoginForm onClose={toggleLogin} onUserUpdate={onUserUpdate}/>} 
+    </div>      
+    );
 
-            function handleLoginClick() {
-                // Add code to handle the login logic
-                  }
                   }
 
                   export default LoginButton;

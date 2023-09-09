@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import RegistrationForm from './RegistrationForm'
+
 function RegisterButton({ onUserUpdate }) {
    const [showRegistration, setShowRegistration] = useState(false);
    const toggleRegistration = () => {
