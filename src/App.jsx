@@ -218,7 +218,7 @@ function PhoneNumberBox() {
       <input
         type="text"
         placeholder="Phone Number"
-        className="w-1/2 px-4 py-2 rounded-md bg-gray-200 placeholder-gray-500 focus:outline-none mt-4"
+        className="w-3/4 px-4 py-2 rounded-md bg-gray-200 placeholder-gray-500 focus:outline-none mt-4"
         onChange={handleChange}
 	style={buttonStyle}  // Apply the inline styles here
       />
@@ -388,6 +388,7 @@ function Sniff() {
 	  <div>
 	    <button 
 	     onClick={() => setShowScrollArea(!showScrollArea)}
+             style={buttonStyle}
              className="w-1/5 px-4 py-2 rounded-md bg-black text-white hover:bg-gray-900 focus:outline-none mr-2 disabled:opacity-75 disabled:cursor-not-allowed"
 	  >
 	      Sniff
