@@ -18,6 +18,7 @@ WORKDIR /var/www/html
 
 # Expose port 80
 EXPOSE 80
+EXPOSE 443
 
 # Start Apache2 in the foreground
 CMD ["apache2ctl", "-D", "FOREGROUND"]
