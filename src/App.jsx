@@ -321,7 +321,7 @@ function InfoBoxCall() {
      
      resultTextCall.innerText = "";
      if (parsedResponse_call.call_conversation === null){
-     resultTextCall.innerText += "The place has not yet been called."
+     resultTextCall.innerText += "The call function is in beta testing, but you can call yourself or your friends for fun! :)"
     }else{
      resultTextCall.innerText += parsedResponse_call.call_conversation
     }
@@ -354,7 +354,7 @@ function InfoBoxReview() {
      const parsedResponse = JSON.parse(responseBody);
      resultText.innerText = "";
      if (parsedResponse.review_summary === null){
-     resultText.innerText += "The place has not yet been parsed."
+     resultText.innerText += "The place has not yet been parsed.\n It will take a while (usually < 2 mins) to retrieve real-time reviews."
     }else{
      resultText.innerText += parsedResponse.review_summary
     }
