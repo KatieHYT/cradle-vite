@@ -42,10 +42,19 @@
 
 - Step-3: run docker container
   ```
-  docker run -d -p 80:80 --name my-apache-container apache-container
+  docker run -d -p 80:80 -p 443:443 --name my-apache-container apache-container
   ```
 
-- Step-4:
+- Step-4: enter container 
+  ```
+  apt-get install certbot python3-certbot-apache
+  certbot --apache -d cradle.wiki
+  ```
+
+- Step-5: restart container
+
+  
+- Step-6:
   Go check `cradle.wiki`
 
 ## npm run (for dev testing)
