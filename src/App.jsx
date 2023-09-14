@@ -165,7 +165,7 @@ function ProjectInfo(){
   return(
     <div>
     <h1>Cradle.wiki</h1>
-    <p className="text-gray-500 text-sm mb-2">Together, make the world better!</p>
+    <p className="text-gray-500 text-xs mb-2">Team CRADLE is building a tool to "sniff out" dog-friendliness in any place!</p>
     <HyperLink/>
     </div>
   )
