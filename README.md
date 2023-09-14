@@ -47,7 +47,6 @@
 
 - Step-4: enter container 
   ```
-  apt-get install certbot python3-certbot-apache
   certbot --apache -d cradle.wiki
   ```
 

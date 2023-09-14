@@ -7,7 +7,9 @@ ENV DEBIAN_FRONTEND=noninteractive
 # Install Apache2 and other required packages
 RUN apt-get update && \
     apt-get install -y tzdata && \
-    apt-get install -y apache2
+    apt-get install -y apache2 && \
+    apt-get install -y certbot && \
+    apt-get install -y python3-certbot-apache
 
 # Copy the Apache configuration file
 COPY cradle-wiki.conf /etc/apache2/sites-available/cradle-wiki.conf
