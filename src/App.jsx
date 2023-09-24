@@ -247,6 +247,7 @@ function CallButton() {
              body: JSON.stringify({ 
 		     call_to: phoneNumber,
 		     latlng: latlng,
+		     talker_mode: "Giovanni",
 	     }),
            });
       //const contentType = response.headers.get('content-type');
